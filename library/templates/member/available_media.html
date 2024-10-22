@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Médias Disponibles{% endblock %}
+
+{% block content %}
+    <h1>Catalogue des Médias</h1>
+
+    {% if books %}
+        <h2>Livres</h2>
+        <div class="media-grid">
+            {% for book in books %}
+                <div class="media-item">
+                    <ul>
+                        <li>{{ book.title }}</li>
+                        <p>Auteur : {{ book.author }}</p>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if dvds %}
+        <h2>DVDs</h2>
+        <div class="media-grid">
+            {% for dvd in dvds %}
+                <div class="media-item">
+                    <ul>
+                        <li>{{ dvd.title }}</li>
+                        <p>Réalisateur : {{ dvd.director }}</p>
+                    </ul>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if cds %}
+        <h2>CDs</h2>
+        <div class="media-grid">
+            {% for cd in cds %}
+                <div class="media-item">
+                    <ul>
+                        <li>{{ cd.title }}</li>
+                        <p>Artiste : {{ cd.artist }}</p>
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if not books and not dvds and not cds %}
+        <p>Aucun média disponible.</p>
+    {% endif %}
+<a href="{% url 'home' %}">Retour à l'accueil</a>
+
+{% endblock %}
