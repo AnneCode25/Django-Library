@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Dashboard</h2>
+<a href="{% url 'member_list' %}">Liste des membres</a>
+<br>
 <a href="{% url 'home' %}">Retour à l'accueil</a>
 <a href="{% url 'logout' %}">Se déconnecter</a>
 {% endblock %}

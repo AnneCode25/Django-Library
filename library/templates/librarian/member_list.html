@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Liste des Membres</h2>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if members %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.last_name}}</td>
+                <td>{{ member.first_name }}</td>
+                <td>
+                    <a href="{% url 'member_detail' member.id %}">Détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucun membre n'est disponible pour le moment.</p>
+{% endif %}
+
+<a href="{% url 'add_member' %}">Ajouter un nouveau membre</a>
+<a href="{% url 'dashboard' %}">Retour au Dashboard</a>
+{% endblock %}
