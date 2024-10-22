@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 class User(AbstractUser):
@@ -64,12 +66,14 @@ class BoardGame(models.Model):
 
 class Loan(models.Model):
     member = models.ForeignKey('Member', on_delete=models.CASCADE, related_name='loans')
-    book = models.ForeignKey('Book', on_delete=models.CASCADE, related_name='loans')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    item = GenericForeignKey('content_type', 'object_id')
     loan_date = models.DateField(default=timezone.now)
     return_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.member} a emprunté {self.book}"
+        return f"{self.member} a emprunté {self.item}"
 
     def due_date(self):
         return self.loan_date + timezone.timedelta(days=7)

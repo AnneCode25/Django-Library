@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Dashboard</h2>
+<a href="{% url 'borrow_item' %}">Enregistrer un emprunt</a>
+<a href="{% url 'return_item' %}">Rendre un média</a>
 <a href="{% url 'member_list' %}">Liste des membres</a>
 <br>
 <a href="{% url 'home' %}">Retour à l'accueil</a>

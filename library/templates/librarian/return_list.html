@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Retour de média</h2>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h3>Emprunts en cours</h3>
+{% if loans %}
+    <ul>
+    {% for loan in loans %}
+        <li>
+            {{ loan.member }} a emprunté {{ loan.item }} le {{ loan.loan_date }}
+            <br>
+            À retourner avant le : {{ loan.due_date|date:"d/m/Y" }}
+            {% if loan.is_overdue %}
+                <span class="text-danger">(En retard)</span>
+            {% endif %}
+            <form action="{% url 'confirm_return' loan.id %}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-sm btn-primary">Enregistrer le retour</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun emprunt en cours.</p>
+{% endif %}
+
+<a href="{% url 'dashboard' %}" class="btn btn-secondary">Retour au Dashboard</a>
+{% endblock %}

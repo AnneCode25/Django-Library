@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Confirmer le retour</h2>
+
+<div>
+    <p>Êtes-vous sûr de vouloir enregistrer le retour de :</p>
+    <ul>
+        <li>Item : {{ loan.item }}</li>
+        <li>Emprunté par : {{ loan.member }}</li>
+        <li>Date d'emprunt : {{ loan.loan_date|date:"d/m/Y" }}</li>
+        <li>Date de retour prévue : {{ loan.due_date|date:"d/m/Y" }}</li>
+        {% if loan.is_overdue %}
+            <li class="text-danger">En retard de {{ loan.loan_date|timesince }}</li>
+        {% endif %}
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Confirmer le retour</button>
+        <a href="{% url 'return_item' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

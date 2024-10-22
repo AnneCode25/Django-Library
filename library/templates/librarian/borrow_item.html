@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Emprunter un média</h2>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post" id="loan-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Emprunter</button>
+</form>
+
+<h3>Emprunts en cours</h3>
+<ul>
+{% for loan in loans %}
+    <li>
+        {{ loan.member }} a emprunté {{ loan.item }} le {{ loan.loan_date }}
+        <br>
+        À retourner avant le : {{ loan.due_date|date:"d/m/Y" }}
+        {% if loan.is_overdue %}
+            <span class="text-danger">(En retard)</span>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'dashboard' %}">Retour au Dashboard</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const itemTypeSelect = document.querySelector('#id_item_type');
+    const itemSelect = document.querySelector('#id_item');
+
+    itemTypeSelect.addEventListener('change', function() {
+        // Récupérer le formulaire
+        const form = document.getElementById('loan-form');
+        const formData = new FormData(form);
+
+        // Faire une requête AJAX pour obtenir les items disponibles
+        fetch('{% url "borrow_item" %}?' + new URLSearchParams({
+            'item_type': this.value
+        }))
+        .then(response => response.json())
+        .then(data => {
+            // Vider et remplir le select des items
+            itemSelect.innerHTML = '<option value="">---------</option>';
+            data.items.forEach(item => {
+                const option = new Option(item.text, item.id);
+                itemSelect.add(option);
+            });
+            // Activer le select des items
+            itemSelect.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}
