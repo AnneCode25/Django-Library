@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Liste des {{ media_name }}</h2>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                {% if media_type == 'book' %}
+                    <th>Auteur</th>
+                {% elif media_type == 'dvd' %}
+                    <th>Réalisateur</th>
+                {% elif media_type == 'cd' %}
+                    <th>Artiste</th>
+                {% endif %}
+                <th>Disponibilité</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.title }}</td>
+                {% if media_type == 'book' %}
+                    <td>{{ item.author }}</td>
+                {% elif media_type == 'dvd' %}
+                    <td>{{ item.director }}</td>
+                {% elif media_type == 'cd' %}
+                    <td>{{ item.artist }}</td>
+                {% endif %}
+                <td>{% if item.is_available %}Disponible{% else %}Non disponible{% endif %}</td>
+                <td>
+                    <a href="{% url 'media_detail' media_type item.id %}">Détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucun {{ media_name|lower }} n'est disponible pour le moment.</p>
+{% endif %}
+
+<a href="{% url 'media_add' media_type %}" class="btn btn-primary">Ajouter un nouveau {{ media_name|lower }}</a>
+<a href="{% url 'dashboard' %}" class="btn btn-secondary">Retour au Dashboard</a>
+{% endblock %}

@@ -60,3 +60,49 @@ class LoanForm(forms.Form):
                 pass
         else:
             self.fields['item'].queryset = Book.objects.none()  # Champ vide par défaut
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'is_available']
+        labels = {
+            'title': 'Titre',
+            'author': 'Auteur',
+            'is_available': 'Disponible'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_available': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }
+
+class DVDForm(forms.ModelForm):
+    class Meta:
+        model = DVD
+        fields = ['title', 'director', 'is_available']
+        labels = {
+            'title': 'Titre',
+            'director': 'Directeur',
+            'is_available': 'Disponible'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'director': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_available': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }
+
+class CDForm(forms.ModelForm):
+    class Meta:
+        model = CD
+        fields = ['title', 'artist', 'is_available']
+        labels = {
+            'title': 'Titre',
+            'artist': 'Artiste',
+            'is_available': 'Disponible'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'artist': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_available': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }

@@ -11,4 +11,7 @@ urlpatterns = [
     path('borrow/', views.borrow_item, name='borrow_item'),
     path('return/', views.return_list, name='return_item'),  # Vue de la liste des retours
     path('return/<int:loan_id>/confirm/', views.confirm_return, name='confirm_return'),  # Pour confirmer un retour spécifique
+    path('media/<str:media_type>/', views.media_list, name='media_list'),
+    path('media/<str:media_type>/add/', views.media_add, name='media_add'),
+    path('media/<str:media_type>/<int:item_id>/', views.media_detail, name='media_detail'),
 ]

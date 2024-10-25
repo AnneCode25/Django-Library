@@ -1,10 +1,115 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Dashboard</h2>
-<a href="{% url 'borrow_item' %}">Enregistrer un emprunt</a>
-<a href="{% url 'return_item' %}">Rendre un média</a>
-<a href="{% url 'member_list' %}">Liste des membres</a>
+
+<h2>Tableau de bord</h2>
+<p>Bienvenue, {{ user.username }} !</p>
+
+<!-- Statistiques générales -->
+<div>
+    <h3>Aperçu général</h3>
+    <ul>
+        <li>Nombre total de membres : {{ total_members }}</li>
+        <li>Emprunts en cours : {{ total_loans }}</li>
+        <li>Emprunts en retard : {{ total_overdue }}</li>
+    </ul>
+</div>
+
+<!-- Statistiques des médias -->
+<div>
+    <h3>État de la bibliothèque</h3>
+    {% for key, stats in media_stats.items %}
+    <div>
+        <h4>{{ stats.name }}</h4>
+        <ul>
+            <li>Total : {{ stats.total }}</li>
+            <li>Disponibles : {{ stats.available }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Emprunts en retard -->
+<div>
+    <h3>Emprunts en retard</h3>
+    {% if overdue_loans %}
+    <table>
+        <thead>
+        <tr>
+            <th>Membre</th>
+            <th>Média</th>
+            <th>Type</th>
+            <th>Date d'emprunt</th>
+            <th>Retard</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for loan in overdue_loans %}
+        <tr>
+            <td>{{ loan.member.first_name }} {{ loan.member.last_name }}</td>
+            <td>{{ loan.item.title }}</td>
+            <td>{{ loan.content_type.model|title }}</td>
+            <td>{{ loan.loan_date }}</td>
+            <td>{{ loan.loan_date|timesince }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun emprunt en retard.</p>
+    {% endif %}
+</div>
+
+<!-- Emprunts en cours -->
+<div>
+    <h3>Emprunts en cours</h3>
+    {% if current_loans %}
+    <table>
+        <thead>
+        <tr>
+            <th>Membre</th>
+            <th>Média</th>
+            <th>Type</th>
+            <th>Date d'emprunt</th>
+            <th>Date de retour prévue</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for loan in current_loans %}
+        <tr>
+            <td>{{ loan.member.first_name }} {{ loan.member.last_name }}</td>
+            <td>{{ loan.item.title }}</td>
+            <td>{{ loan.content_type.model|title }}</td>
+            <td>{{ loan.loan_date }}</td>
+            <td>{{ loan.due_date }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun emprunt en cours.</p>
+    {% endif %}
+</div>
+
+<h3>Gestion des médias</h3>
+<div>
+    <a href="{% url 'media_list' 'book' %}" class="btn btn-primary">Gérer les livres</a>
+    <a href="{% url 'media_list' 'dvd' %}" class="btn btn-primary">Gérer les DVDs</a>
+    <a href="{% url 'media_list' 'cd' %}" class="btn btn-primary">Gérer les CDs</a>
+</div>
+<h3>Gestion des emprunts</h3>
+<div>
+    <a href="{% url 'borrow_item' %}">Enregistrer un emprunt</a>
+    <a href="{% url 'return_item' %}">Rendre un média</a>
+</div>
+<h3>Gestion des membres</h3>
+<div>
+    <a href="{% url 'member_list' %}" class="btn btn-primary">Liste des membres</a>
+    <a href="{% url 'add_member' %}" class="btn btn-success">Ajouter un membre</a>
+</div>
 <br>
-<a href="{% url 'home' %}">Retour à l'accueil</a>
-<a href="{% url 'logout' %}">Se déconnecter</a>
-{% endblock %}
+<hr>
+<div>
+    <a href="{% url 'home' %}">Retour à l'accueil</a>
+    <a href="{% url 'logout' %}">Se déconnecter</a>
+</div>
+    {% endblock %}
