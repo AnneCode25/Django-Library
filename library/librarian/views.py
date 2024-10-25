@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.utils import timezone 
 from django.contrib.auth.decorators import login_required
-from shared_models.models import Member, Media, Book, DVD, CD, Loan
-from .forms import AddMemberForm, MemberForm, LoanForm, BookForm, DVDForm, CDForm
+from shared_models.models import Member, Media, Book, DVD, CD, Loan, BoardGame
+from .forms import AddMemberForm, MemberForm, LoanForm, BookForm, DVDForm, CDForm, BoardGameForm
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 import logging
@@ -363,3 +363,40 @@ def borrow_item(request):
         'loans': Loan.objects.filter(return_date__isnull=True),
     }
     return render(request, 'librarian/borrow_item.html', context)
+
+
+@login_required
+def boardgame_list(request):
+    boardgames = BoardGame.objects.all().order_by('name')
+    return render(request, 'librarian/boardgame_list.html', {'boardgames': boardgames})
+
+@login_required
+def boardgame_add(request):
+    if request.method == 'POST':
+        form = BoardGameForm(request.POST)
+        if form.is_valid():
+            boardgame = form.save()
+            messages.success(request, f"Le jeu '{boardgame.name}' a été ajouté avec succès!")
+            return redirect('boardgame_list')
+    else:
+        form = BoardGameForm()
+    return render(request, 'librarian/boardgame_add.html', {'form': form})
+
+@login_required
+def boardgame_detail(request, boardgame_id):
+    boardgame = get_object_or_404(BoardGame, id=boardgame_id)
+    if request.method == 'POST':
+        if 'update' in request.POST:
+            form = BoardGameForm(request.POST, instance=boardgame)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"Le jeu '{boardgame.name}' a été mis à jour avec succès.")
+                return redirect('boardgame_detail', boardgame_id=boardgame.id)
+        elif 'delete' in request.POST:
+            name = boardgame.name
+            boardgame.delete()
+            messages.success(request, f"Le jeu '{name}' a été supprimé avec succès.")
+            return redirect('boardgame_list')
+    else:
+        form = BoardGameForm(instance=boardgame)
+    return render(request, 'librarian/boardgame_detail.html', {'form': form, 'boardgame': boardgame})

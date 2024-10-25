@@ -90,19 +90,24 @@
     {% endif %}
 </div>
 
-<h3>Gestion des médias</h3>
 <div>
+    <h3>Gestion des médias</h3>
     <a href="{% url 'media_list' 'book' %}" class="btn btn-primary">Gérer les livres</a>
     <a href="{% url 'media_list' 'dvd' %}" class="btn btn-primary">Gérer les DVDs</a>
     <a href="{% url 'media_list' 'cd' %}" class="btn btn-primary">Gérer les CDs</a>
 </div>
-<h3>Gestion des emprunts</h3>
 <div>
+    <h3>Gestion des jeux de plateau</h3>
+    <a href="{% url 'boardgame_list' %}">Liste des jeux de plateau</a>
+    <a href="{% url 'boardgame_add' %}">Ajouter un jeu de plateau</a>
+</div>
+<div>
+    <h3>Gestion des emprunts</h3>
     <a href="{% url 'borrow_item' %}">Enregistrer un emprunt</a>
     <a href="{% url 'return_item' %}">Rendre un média</a>
 </div>
-<h3>Gestion des membres</h3>
 <div>
+    <h3>Gestion des membres</h3>
     <a href="{% url 'member_list' %}" class="btn btn-primary">Liste des membres</a>
     <a href="{% url 'add_member' %}" class="btn btn-success">Ajouter un membre</a>
 </div>

@@ -14,4 +14,7 @@ urlpatterns = [
     path('media/<str:media_type>/', views.media_list, name='media_list'),
     path('media/<str:media_type>/add/', views.media_add, name='media_add'),
     path('media/<str:media_type>/<int:item_id>/', views.media_detail, name='media_detail'),
+    path('boardgames/', views.boardgame_list, name='boardgame_list'),
+    path('boardgame/add/', views.boardgame_add, name='boardgame_add'),
+    path('boardgame/<int:boardgame_id>/', views.boardgame_detail, name='boardgame_detail'),
 ]

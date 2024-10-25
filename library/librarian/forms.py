@@ -1,5 +1,5 @@
 from django import forms
-from shared_models.models import Loan, Book, Member
+from shared_models.models import Loan, Book, DVD, CD, Member, BoardGame
 
 class AddMemberForm(forms.ModelForm):
     class Meta :
@@ -21,8 +21,7 @@ class MemberForm(forms.ModelForm):
         }
 
 
-from django import forms
-from shared_models.models import Member, Book, DVD, CD
+
 
 class LoanForm(forms.Form):
     member = forms.ModelChoiceField(
@@ -105,4 +104,14 @@ class CDForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'artist': forms.TextInput(attrs={'class': 'form-control'}),
             'is_available': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        }
+
+
+class BoardGameForm(forms.ModelForm):
+    class Meta:
+        model = BoardGame
+        fields = ['name', 'creator']
+        labels = {
+            'name': 'Nom',
+            'creator': 'Créateur'
         }

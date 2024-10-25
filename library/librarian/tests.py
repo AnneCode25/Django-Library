@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.utils import timezone
 from datetime import timedelta
-from shared_models.models import Member, Book, DVD, CD, Loan
+from shared_models.models import Member, Book, DVD, CD, Loan, BoardGame
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -103,6 +103,104 @@ class MediaModelTest(TestCase):
         self.book.save()
 
         self.assertFalse(self.book.is_available)
+
+
+# Dans librarian/tests.py
+
+class BoardGameModelTest(TestCase):
+    def setUp(self):
+        self.boardgame = BoardGame.objects.create(
+            name="Monopoly",
+            creator="Charles Darrow"
+        )
+
+    def test_boardgame_creation(self):
+        """Test la création d'un jeu de plateau"""
+        self.assertEqual(self.boardgame.name, "Monopoly")
+        self.assertEqual(self.boardgame.creator, "Charles Darrow")
+        self.assertEqual(str(self.boardgame), "Monopoly")
+
+
+class BoardGameViewsTest(TestCase):
+    def setUp(self):
+        # Créer un utilisateur bibliothécaire pour les tests
+        User = get_user_model()
+        self.librarian = User.objects.create_user(
+            username='testlibrarian',
+            password='testpass123',
+            is_librarian=True
+        )
+        # Connexion du bibliothécaire
+        self.client.login(username='testlibrarian', password='testpass123')
+
+        # Créer un jeu de test
+        self.boardgame = BoardGame.objects.create(
+            name="Monopoly",
+            creator="Charles Darrow"
+        )
+
+    def test_boardgame_list_view(self):
+        """Test l'affichage de la liste des jeux"""
+        response = self.client.get(reverse('boardgame_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'librarian/boardgame_list.html')
+        self.assertContains(response, "Monopoly")
+        self.assertContains(response, "Charles Darrow")
+
+    def test_boardgame_add_view(self):
+        """Test l'ajout d'un nouveau jeu"""
+        # Test GET
+        response = self.client.get(reverse('boardgame_add'))
+        self.assertEqual(response.status_code, 200)
+
+        # Test POST avec données valides
+        data = {
+            'name': 'Risk',
+            'creator': 'Albert Lamorisse'
+        }
+        response = self.client.post(reverse('boardgame_add'), data)
+        self.assertEqual(response.status_code, 302)  # Redirection après succès
+        self.assertTrue(BoardGame.objects.filter(name='Risk').exists())
+
+    def test_boardgame_detail_view(self):
+        """Test la vue détaillée d'un jeu"""
+        # Test GET
+        response = self.client.get(reverse('boardgame_detail', args=[self.boardgame.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Monopoly")
+
+        # Test modification
+        data = {
+            'name': 'Monopoly Edition Spéciale',
+            'creator': 'Charles Darrow',
+            'update': 'update'
+        }
+        response = self.client.post(reverse('boardgame_detail', args=[self.boardgame.id]), data)
+        self.boardgame.refresh_from_db()
+        self.assertEqual(self.boardgame.name, 'Monopoly Edition Spéciale')
+
+        # Test suppression
+        response = self.client.post(
+            reverse('boardgame_detail', args=[self.boardgame.id]),
+            {'delete': 'delete'}
+        )
+        self.assertFalse(BoardGame.objects.filter(id=self.boardgame.id).exists())
+
+    def test_unauthorized_access(self):
+        """Test l'accès non autorisé"""
+        # Déconnexion
+        self.client.logout()
+
+        # Test accès aux vues protégées
+        urls = [
+            reverse('boardgame_list'),
+            reverse('boardgame_add'),
+            reverse('boardgame_detail', args=[self.boardgame.id])
+        ]
+
+        for url in urls:
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 302)  # Redirection vers login
 
 
 class LoanModelTest(TestCase):

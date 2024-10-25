@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Liste des Jeux de Plateau</h2>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if boardgames %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Créateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in boardgames %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td>{{ game.creator }}</td>
+                <td>
+                    <a href="{% url 'boardgame_detail' game.id %}">Détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucun jeu de plateau n'est disponible pour le moment.</p>
+{% endif %}
+
+<a href="{% url 'boardgame_add' %}">Ajouter un nouveau jeu</a>
+<a href="{% url 'dashboard' %}">Retour au Dashboard</a>
+{% endblock %}
