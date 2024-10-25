@@ -48,7 +48,22 @@
         </div>
     {% endif %}
 
-    {% if not books and not dvds and not cds %}
+{% if boardgames %}
+<h2>Jeux de Plateau</h2>
+    <div class="media-grid">
+        {% for game in boardgames %}
+            <div class="media-item">
+                <ul>
+                    <li>{{ game.name }}</li>
+                    <p>Créateur : {{ game.creator }}</p>
+                    <p><em>Consultation sur place uniquement</em></p>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+    {% if not books and not dvds and not cds and not boardgames %}
         <p>Aucun média disponible.</p>
     {% endif %}
 <a href="{% url 'home' %}">Retour à l'accueil</a>

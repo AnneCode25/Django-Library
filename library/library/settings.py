@@ -57,6 +57,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'member': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }
 
