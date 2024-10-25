@@ -76,12 +76,17 @@ class Loan(models.Model):
         return f"{self.member} a emprunté {self.item}"
 
     def due_date(self):
-        return self.loan_date + timezone.timedelta(days=7)
+        return (self.loan_date + timezone.timedelta(days=7))
 
     def is_overdue(self):
-        return timezone.now().date() > self.due_date() \
-            if not self.return_date \
-            else False
+        if self.return_date:
+            return False
+        current_date = timezone.now().date()
+        due = self.due_date()
+        # Convertir en date si c'est un datetime
+        if hasattr(due, 'date'):
+            due = due.date()
+        return current_date > due
 
     class Meta:
         ordering = ['-loan_date']
