@@ -7,6 +7,7 @@ from shared_models.models import Member, Media, Book, DVD, CD, Loan
 from .forms import AddMemberForm, MemberForm, LoanForm, BookForm, DVDForm, CDForm
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
+import logging
 
 def user_login(request):
     if request.method == 'POST':
@@ -290,3 +291,75 @@ def media_detail(request, media_type, item_id):
     }
 
     return render(request, 'librarian/media_detail.html', context)
+
+
+# Créer un logger pour l'application
+logger = logging.getLogger('librarian')
+
+@login_required
+def add_member(request):
+    if request.method == 'POST':
+        form = AddMemberForm(request.POST)
+        if form.is_valid():
+            member = form.save(commit=False)
+            member.save()
+            logger.info(f"Nouveau membre créé: {member.last_name}, {member.first_name} par {request.user.username}")
+            messages.success(request, f"Le membre '{member.last_name}', '{member.first_name}' a été ajouté avec succès!")
+            return redirect('dashboard')
+        else:
+            logger.warning(f"Tentative échouée de création de membre par {request.user.username}")
+    else:
+        form = AddMemberForm()
+
+    return render(request, 'librarian/add_member.html', {'form': form})
+
+@login_required
+def borrow_item(request):
+    if 'item_type' in request.GET:
+        item_type = request.GET.get('item_type')
+        items = []
+        if item_type == 'book':
+            items = Book.objects.filter(is_available=True)
+        elif item_type == 'dvd':
+            items = DVD.objects.filter(is_available=True)
+        elif item_type == 'cd':
+            items = CD.objects.filter(is_available=True)
+
+        return JsonResponse({
+            'items': [{'id': item.id, 'text': str(item)} for item in items]
+        })
+
+    if request.method == 'POST':
+        form = LoanForm(request.POST)
+        if form.is_valid():
+            member = form.cleaned_data['member']
+            item_type = form.cleaned_data['item_type']
+            item = form.cleaned_data['item']
+
+            if member.has_overdue_loans():
+                logger.warning(f"Tentative d'emprunt refusée - retards existants: {member}")
+                messages.error(request, "Ce membre a des emprunts en retard...")
+            elif not member.can_borrow():
+                logger.warning(f"Tentative d'emprunt refusée - limite atteinte: {member}")
+                messages.error(request, "Ce membre a déjà atteint la limite de 3 emprunts")
+            else:
+                content_type = ContentType.objects.get_for_model(item.__class__)
+                loan = Loan(
+                    member=member,
+                    content_type=content_type,
+                    object_id=item.id
+                )
+                loan.save()
+                item.is_available = False
+                item.save()
+                logger.info(f"Nouvel emprunt: {item} par {member}")
+                messages.success(request, f"Emprunt de '{item}' par {member} enregistré avec succès!")
+                return redirect('borrow_item')
+    else:
+        form = LoanForm()
+
+    context = {
+        'form': form,
+        'loans': Loan.objects.filter(return_date__isnull=True),
+    }
+    return render(request, 'librarian/borrow_item.html', context)
