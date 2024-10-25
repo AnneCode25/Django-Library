@@ -63,6 +63,9 @@ class BoardGame(models.Model):
     name = models.CharField(max_length=200)
     creator = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 
 class Loan(models.Model):
     member = models.ForeignKey('Member', on_delete=models.CASCADE, related_name='loans')
