@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils import timezone 
 from django.contrib.auth.decorators import login_required
 from shared_models.models import Member, Media, Book, DVD, CD, Loan
-from .forms import AddMemberForm, MemberForm, LoanForm
+from .forms import AddMemberForm, MemberForm, LoanForm, BookForm, DVDForm, CDForm
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 
@@ -25,9 +25,43 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
+
 @login_required
 def dashboard(request):
-    return render(request, 'librarian/dashboard.html')
+    # Statistiques générales
+    total_members = Member.objects.count()
+    active_loans = Loan.objects.filter(return_date__isnull=True)
+    overdue_loans = [loan for loan in active_loans if loan.is_overdue()]
+
+    # Statistiques par type de média
+    media_stats = {
+        'books': {
+            'total': Book.objects.count(),
+            'available': Book.objects.filter(is_available=True).count(),
+            'name': 'Livres'
+        },
+        'dvds': {
+            'total': DVD.objects.count(),
+            'available': DVD.objects.filter(is_available=True).count(),
+            'name': 'DVDs'
+        },
+        'cds': {
+            'total': CD.objects.count(),
+            'available': CD.objects.filter(is_available=True).count(),
+            'name': 'CDs'
+        }
+    }
+
+    context = {
+        'total_members': total_members,
+        'media_stats': media_stats,
+        'current_loans': active_loans,
+        'overdue_loans': overdue_loans,
+        'total_loans': active_loans.count(),
+        'total_overdue': len(overdue_loans)
+    }
+
+    return render(request, 'librarian/dashboard.html', context)
 
 
 @login_required
@@ -156,3 +190,103 @@ def confirm_return(request, loan_id):
         'loan': loan
     }
     return render(request, 'librarian/confirm_return.html', context)
+
+
+@login_required
+def media_list(request, media_type):
+    # Mapping des types de médias vers leurs modèles et noms
+    media_mapping = {
+        'book': {'model': Book, 'name': 'Livres', 'name_singular': 'Livre'},
+        'dvd': {'model': DVD, 'name': 'DVDs', 'name_singular': 'DVD'},
+        'cd': {'model': CD, 'name': 'CDs', 'name_singular': 'CD'},
+    }
+
+    if media_type not in media_mapping:
+        messages.error(request, "Type de média non valide.")
+        return redirect('dashboard')
+
+    media_info = media_mapping[media_type]
+    items = media_info['model'].objects.all().order_by('title')
+
+    context = {
+        'items': items,
+        'media_type': media_type,
+        'media_name': media_info['name'],
+        'media_name_singular': media_info['name_singular']
+    }
+
+    return render(request, 'librarian/media_list.html', context)
+
+
+@login_required
+def media_add(request, media_type):
+    # Mapping des types de médias vers leurs formulaires et noms
+    form_mapping = {
+        'book': {'form': BookForm, 'name': 'Livre'},
+        'dvd': {'form': DVDForm, 'name': 'DVD'},
+        'cd': {'form': CDForm, 'name': 'CD'},
+    }
+
+    if media_type not in form_mapping:
+        messages.error(request, "Type de média non valide.")
+        return redirect('dashboard')
+
+    form_info = form_mapping[media_type]
+
+    if request.method == 'POST':
+        form = form_info['form'](request.POST)
+        if form.is_valid():
+            item = form.save()
+            messages.success(request, f"Le {form_info['name']} '{item.title}' a été ajouté avec succès!")
+            return redirect('media_list', media_type=media_type)
+    else:
+        form = form_info['form']()
+
+    context = {
+        'form': form,
+        'media_type': media_type,
+        'media_name': form_info['name']
+    }
+
+    return render(request, 'librarian/media_add.html', context)
+
+
+@login_required
+def media_detail(request, media_type, item_id):
+    # Mapping des types de médias vers leurs modèles, formulaires et noms
+    media_mapping = {
+        'book': {'model': Book, 'form': BookForm, 'name': 'Livre'},
+        'dvd': {'model': DVD, 'form': DVDForm, 'name': 'DVD'},
+        'cd': {'model': CD, 'form': CDForm, 'name': 'CD'},
+    }
+
+    if media_type not in media_mapping:
+        messages.error(request, "Type de média non valide.")
+        return redirect('dashboard')
+
+    media_info = media_mapping[media_type]
+    item = get_object_or_404(media_info['model'], id=item_id)
+
+    if request.method == 'POST':
+        if 'update' in request.POST:
+            form = media_info['form'](request.POST, instance=item)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"Le {media_info['name']} '{item.title}' a été mis à jour avec succès.")
+                return redirect('media_detail', media_type=media_type, item_id=item.id)
+        elif 'delete' in request.POST:
+            title = item.title
+            item.delete()
+            messages.success(request, f"Le {media_info['name']} '{title}' a été supprimé avec succès.")
+            return redirect('media_list', media_type=media_type)
+    else:
+        form = media_info['form'](instance=item)
+
+    context = {
+        'form': form,
+        'item': item,
+        'media_type': media_type,
+        'media_name': media_info['name']
+    }
+
+    return render(request, 'librarian/media_detail.html', context)
