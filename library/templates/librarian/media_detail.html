@@ -14,18 +14,18 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" name="update" class="btn btn-primary">Mettre à jour</button>
+    <button type="submit" name="update">Mettre à jour</button>
 </form>
 
 <form method="post" style="margin-top: 20px;">
     {% csrf_token %}
-    <button type="submit" name="delete" class="btn btn-danger"
+    <button type="submit" name="delete"
             onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce {{ media_name|lower }} ?');">
         Supprimer
     </button>
 </form>
 
-<a href="{% url 'media_list' media_type %}" class="btn btn-secondary mt-3">
+<a href="{% url 'media_list' media_type %}">
     Retour à la liste des {{ media_name|lower }}s
 </a>
 {% endblock %}

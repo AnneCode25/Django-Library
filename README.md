@@ -88,5 +88,50 @@ Dépendances :
 - sqlparse 0.5.1
 - tzdata==2024.2
 
+## Base de données de test
+
+Une base de données de test est disponible avec des données exemple comprenant :
+- Des membres
+- Des médias (livres, DVDs, CDs, jeux de plateau)
+- Des emprunts en cours et retournés
+
+Pour installer ces données :
+
+1. Créer et activer l'environnement virtuel :
+```bash
+python -m venv env
+env\Scripts\activate  # Windows
+source env/bin/activate  # Linux/Mac
+```
+2. Installer les dépendances :
+```bash
+pip install -r requirements.txt
+```
+3. Effectuer les migrations :
+```bash
+python manage.py migrate
+```
+4. Charger les données de test :
+```bash
+python manage.py loaddata fixtures/all_data.json
+```
+
+## Page d'erreur
+1. Test des pages d'erreur en local
+Pour tester les pages d'erreur personnalisées en développement :
+
+- Définissez temporairement DEBUG = False dans settings.py
+- Ajoutez 'localhost' et '127.0.0.1' à ALLOWED_HOSTS
+- Lancez le serveur avec : python manage.py runserver --insecure
+- Visitez une URL inexistante pour voir la page 404 personnalisée
+
+⚠️ N'oubliez pas de remettre DEBUG = True après les tests en développement !
+Pages d'erreur personnalisées
+
+2. Le projet inclut des pages d'erreur personnalisées :
+
+- 404 (Page non trouvée)
+
+
 ## Auteur
 Anne Villette

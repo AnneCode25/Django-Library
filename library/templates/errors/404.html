@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>        La page que vous recherchez semble introuvable.
+        Pas d'inquiétude, vous pouvez retourner à l'accueil !</p>
+<br>
+<a href="{% url 'home' %}">Retour à l'accueil</a>
+
+{% endblock %}

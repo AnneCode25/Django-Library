@@ -22,7 +22,7 @@
                 <span class="text-danger">(En retard)</span>
             {% endif %}
             <form action="{% url 'confirm_return' loan.id %}" method="get" style="display: inline;">
-                <button type="submit" class="btn btn-sm btn-primary">Enregistrer le retour</button>
+                <button type="submit">Enregistrer le retour</button>
             </form>
         </li>
     {% endfor %}
@@ -31,5 +31,5 @@
     <p>Aucun emprunt en cours.</p>
 {% endif %}
 
-<a href="{% url 'dashboard' %}" class="btn btn-secondary">Retour au Dashboard</a>
+<a href="{% url 'dashboard' %}">Retour au Dashboard</a>
 {% endblock %}
