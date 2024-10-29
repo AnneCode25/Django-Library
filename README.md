@@ -34,9 +34,13 @@ source env/bin/activate
 ```
 4. Installer les dépendances
 ```bash
-pip install -r requirements.txt
+pip install django
 ```
-5. Effectuer les migrations
+5. Création du dossier "logs"
+```bash
+mkdir logs
+```
+6. Effectuer les migrations
 ```bash
 python manage.py migrate
 ```
@@ -103,17 +107,13 @@ python -m venv env
 env\Scripts\activate  # Windows
 source env/bin/activate  # Linux/Mac
 ```
-2. Installer les dépendances :
-```bash
-pip install -r requirements.txt
-```
-3. Effectuer les migrations :
+2. Effectuer les migrations :
 ```bash
 python manage.py migrate
 ```
-4. Charger les données de test :
+3Charger les données de test :
 ```bash
-python manage.py loaddata fixtures/all_data.json
+python manage.py loaddata fixtures/shared_models.json
 ```
 
 ## Page d'erreur

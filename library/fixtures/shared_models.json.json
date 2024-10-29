@@ -1,0 +1,346 @@
+[
+{
+  "model": "shared_models.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$dtgoKcn0ntsLUXgrMsLDAl$2MDCHz0LMmIsqnVPVcnj49lSvogPLM95zrpIEG39OPY=",
+    "last_login": "2024-10-25T20:30:23.745Z",
+    "is_superuser": true,
+    "username": "anne",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-10-22T15:14:32.961Z",
+    "is_librarian": false,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "shared_models.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$E96BOgkXuqNUgJrOiEecQi$SSSIHlyJH/gAciifzVjjU1hpjnHujnmmEDhwhaQJZQs=",
+    "last_login": "2024-10-25T20:31:10.436Z",
+    "is_superuser": false,
+    "username": "bibliothecaire1",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-10-22T16:01:49Z",
+    "is_librarian": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "shared_models.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$NyuASCLZN556pVv2M93uWC$3dj8jp7rxN99jbf1UKyKamckqIMKGg1uUzBRg+uQFv8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "bibliothecaire2",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-10-25T20:23:16Z",
+    "is_librarian": true,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "shared_models.member",
+  "pk": 3,
+  "fields": {
+    "first_name": "Jean",
+    "last_name": "Dupont"
+  }
+},
+{
+  "model": "shared_models.member",
+  "pk": 4,
+  "fields": {
+    "first_name": "Marie",
+    "last_name": "Martin"
+  }
+},
+{
+  "model": "shared_models.member",
+  "pk": 5,
+  "fields": {
+    "first_name": "Pierre",
+    "last_name": "Durand"
+  }
+},
+{
+  "model": "shared_models.member",
+  "pk": 6,
+  "fields": {
+    "first_name": "Sophie",
+    "last_name": "Dubois"
+  }
+},
+{
+  "model": "shared_models.member",
+  "pk": 7,
+  "fields": {
+    "first_name": "Luc",
+    "last_name": "Petit"
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 2,
+  "fields": {
+    "title": "Mr Mercedes",
+    "is_available": true
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 3,
+  "fields": {
+    "title": "Back in black",
+    "is_available": true
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 4,
+  "fields": {
+    "title": "Inception",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 5,
+  "fields": {
+    "title": "Harry Potter Ó l'Úcole des sorciers",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 6,
+  "fields": {
+    "title": "Le Petit Prince",
+    "is_available": true
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 7,
+  "fields": {
+    "title": "1984",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 8,
+  "fields": {
+    "title": "Les MisÚrables",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 9,
+  "fields": {
+    "title": "Le roi lion",
+    "is_available": true
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 10,
+  "fields": {
+    "title": "Matrix",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 11,
+  "fields": {
+    "title": "Thriller",
+    "is_available": false
+  }
+},
+{
+  "model": "shared_models.media",
+  "pk": 12,
+  "fields": {
+    "title": "Random Access Memories",
+    "is_available": true
+  }
+},
+{
+  "model": "shared_models.book",
+  "pk": 2,
+  "fields": {
+    "author": "Stefen King"
+  }
+},
+{
+  "model": "shared_models.book",
+  "pk": 5,
+  "fields": {
+    "author": "J.K Rowlings"
+  }
+},
+{
+  "model": "shared_models.book",
+  "pk": 6,
+  "fields": {
+    "author": "Antoine de Saint-ExupÚry"
+  }
+},
+{
+  "model": "shared_models.book",
+  "pk": 7,
+  "fields": {
+    "author": "George Orwell"
+  }
+},
+{
+  "model": "shared_models.book",
+  "pk": 8,
+  "fields": {
+    "author": "Victor Hugo"
+  }
+},
+{
+  "model": "shared_models.dvd",
+  "pk": 4,
+  "fields": {
+    "director": "Christopher Nolan"
+  }
+},
+{
+  "model": "shared_models.dvd",
+  "pk": 9,
+  "fields": {
+    "director": "Disney"
+  }
+},
+{
+  "model": "shared_models.dvd",
+  "pk": 10,
+  "fields": {
+    "director": "Wachowski"
+  }
+},
+{
+  "model": "shared_models.cd",
+  "pk": 3,
+  "fields": {
+    "artist": "AC/DC"
+  }
+},
+{
+  "model": "shared_models.cd",
+  "pk": 11,
+  "fields": {
+    "artist": "Michael Jackson"
+  }
+},
+{
+  "model": "shared_models.cd",
+  "pk": 12,
+  "fields": {
+    "artist": "Daft Punk"
+  }
+},
+{
+  "model": "shared_models.boardgame",
+  "pk": 2,
+  "fields": {
+    "name": "Monopoly",
+    "creator": "Elizabeth Magie"
+  }
+},
+{
+  "model": "shared_models.boardgame",
+  "pk": 3,
+  "fields": {
+    "name": "Les Aventuriers du Rail",
+    "creator": "Alan R. Moon"
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 6,
+  "fields": {
+    "member": 4,
+    "content_type": 12,
+    "object_id": 10,
+    "loan_date": "2024-10-25",
+    "return_date": null
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 7,
+  "fields": {
+    "member": 5,
+    "content_type": 10,
+    "object_id": 7,
+    "loan_date": "2024-10-25",
+    "return_date": null
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 8,
+  "fields": {
+    "member": 5,
+    "content_type": 11,
+    "object_id": 11,
+    "loan_date": "2024-10-25",
+    "return_date": null
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 9,
+  "fields": {
+    "member": 5,
+    "content_type": 12,
+    "object_id": 4,
+    "loan_date": "2024-10-25",
+    "return_date": null
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 10,
+  "fields": {
+    "member": 6,
+    "content_type": 10,
+    "object_id": 5,
+    "loan_date": "2024-10-01",
+    "return_date": null
+  }
+},
+{
+  "model": "shared_models.loan",
+  "pk": 11,
+  "fields": {
+    "member": 7,
+    "content_type": 10,
+    "object_id": 8,
+    "loan_date": "2024-10-25",
+    "return_date": null
+  }
+}
+]
