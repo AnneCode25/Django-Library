@@ -32,5 +32,3 @@ static/
 
 # Fichiers de configuration secrets
 *.env
-
-# Fichiers spécifiques à votre projet (ajoutez d'autres lignes si nécessaire)

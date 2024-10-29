@@ -17,7 +17,7 @@
     <button type="submit" name="update">Mettre à jour</button>
 </form>
 
-<form method="post" style="margin-top: 20px;">
+<form method="post">
     {% csrf_token %}
     <button type="submit" name="delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce membre ?');">Supprimer</button>
 </form>

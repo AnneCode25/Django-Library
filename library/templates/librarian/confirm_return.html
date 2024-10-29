@@ -16,8 +16,8 @@
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Confirmer le retour</button>
-        <a href="{% url 'return_item' %}" class="btn btn-secondary">Annuler</a>
+        <button type="submit">Confirmer le retour</button>
+        <a href="{% url 'return_item' %}">Annuler</a>
     </form>
 </div>
 {% endblock %}

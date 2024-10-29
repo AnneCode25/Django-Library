@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Member, Book, DVD, CD, Loan
+from .models import User, Member, Book, DVD, CD, Loan, BoardGame
 
 
 UserAdmin.list_display += ('is_librarian',)
@@ -12,4 +12,5 @@ admin.site.register(Member)
 admin.site.register(Book)
 admin.site.register(DVD)
 admin.site.register(CD)
+admin.site.register(BoardGame)
 admin.site.register(Loan)
